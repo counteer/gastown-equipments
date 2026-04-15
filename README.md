@@ -166,6 +166,9 @@ npm run dev
 
 Service starts on `http://0.0.0.0:3000` by default.
 
+Open `http://localhost:3000/playground` for a lightweight browser playground with
+preset requests, editable JSON bodies, and inline response output for manual API testing.
+
 ### Build and Test
 
 ```bash
@@ -176,6 +179,8 @@ npm test
 ### Implemented Endpoints
 
 - `GET /health`
+- `GET /` (redirects to `/playground`)
+- `GET /playground`
 - `GET /equipment-types`
 - `POST /equipment-types`
 - `PUT /equipment-types/{code}`

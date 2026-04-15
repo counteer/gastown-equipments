@@ -16,6 +16,24 @@ test("GET /health returns ok", async () => {
   assert.deepEqual(response.json(), { status: "ok" });
 });
 
+test("GET / redirects to the API playground", async () => {
+  const app = createApp();
+  const response = await app.inject({ method: "GET", url: "/" });
+
+  assert.equal(response.statusCode, 302);
+  assert.equal(response.headers.location, "/playground");
+});
+
+test("GET /playground serves the HTML playground", async () => {
+  const app = createApp();
+  const response = await app.inject({ method: "GET", url: "/playground" });
+
+  assert.equal(response.statusCode, 200);
+  assert.match(response.headers["content-type"] ?? "", /^text\/html/);
+  assert.match(response.body, /Equipments API Playground/);
+  assert.match(response.body, /Create Reservation/);
+});
+
 test("equipment type endpoints support list/create/update", async () => {
   const app = createApp();
 

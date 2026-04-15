@@ -1,6 +1,7 @@
 import Fastify, { type FastifyInstance } from "fastify";
 
 import { DomainError } from "./errors.js";
+import { renderApiPlayground } from "./playground.js";
 import { EquipmentsStore } from "./store.js";
 
 export function buildServer(store = new EquipmentsStore()): FastifyInstance {
@@ -13,6 +14,14 @@ export function buildServer(store = new EquipmentsStore()): FastifyInstance {
     }
 
     reply.status(500).send({ error: "internal server error" });
+  });
+
+  app.get("/", async (_request, reply) => {
+    reply.redirect("/playground");
+  });
+
+  app.get("/playground", async (_request, reply) => {
+    reply.type("text/html; charset=utf-8").send(renderApiPlayground());
   });
 
   app.get("/health", async () => ({ status: "ok" }));

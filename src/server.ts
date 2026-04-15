@@ -1,10 +1,13 @@
 import Fastify, { type FastifyInstance } from "fastify";
 
 import { DomainError } from "./errors.js";
+import { type RuntimeConfig, StorageBackend } from "./persistence.js";
 import { renderApiPlayground } from "./playground.js";
 import { EquipmentsStore } from "./store.js";
 
-export function buildServer(store = new EquipmentsStore()): FastifyInstance {
+const defaultRuntimeConfig: RuntimeConfig = { backend: StorageBackend.MEMORY, path: "" };
+
+export function buildServer(store = new EquipmentsStore(), runtimeConfig: RuntimeConfig = defaultRuntimeConfig): FastifyInstance {
   const app = Fastify({ logger: false });
 
   app.setErrorHandler((error, _request, reply) => {
@@ -21,7 +24,7 @@ export function buildServer(store = new EquipmentsStore()): FastifyInstance {
   });
 
   app.get("/playground", async (_request, reply) => {
-    reply.type("text/html; charset=utf-8").send(renderApiPlayground());
+    reply.type("text/html; charset=utf-8").send(renderApiPlayground(runtimeConfig));
   });
 
   app.get("/health", async () => ({ status: "ok" }));

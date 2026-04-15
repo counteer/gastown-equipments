@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
+import { StorageBackend } from "../src/persistence.js";
 import { buildServer } from "../src/server.js";
 import { EquipmentsStore } from "../src/store.js";
 
@@ -32,6 +33,20 @@ test("GET /playground serves the HTML playground", async () => {
   assert.match(response.headers["content-type"] ?? "", /^text\/html/);
   assert.match(response.body, /Equipments API Playground/);
   assert.match(response.body, /Create Reservation/);
+  assert.match(response.body, /Active Backend/);
+  assert.match(response.body, /memory/);
+});
+
+test("GET /playground shows configured backend path when present", async () => {
+  const app = buildServer(new EquipmentsStore(true), {
+    backend: StorageBackend.SQLITE,
+    path: "/tmp/equipments.sqlite"
+  });
+  const response = await app.inject({ method: "GET", url: "/playground" });
+
+  assert.equal(response.statusCode, 200);
+  assert.match(response.body, /sqlite/);
+  assert.match(response.body, /\/tmp\/equipments\.sqlite/);
 });
 
 test("equipment type endpoints support list/create/update", async () => {

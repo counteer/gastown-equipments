@@ -1,4 +1,21 @@
-export function renderApiPlayground(): string {
+import type { RuntimeConfig } from "./persistence.js";
+
+function escapeHtml(value: string): string {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+export function renderApiPlayground(config: RuntimeConfig): string {
+  const backendLabel = escapeHtml(config.backend);
+  const backendPath = config.path ? escapeHtml(config.path) : "";
+  const backendDescription = config.path
+    ? `Using ${backendLabel} persistence at <code>${backendPath}</code>.`
+    : `Using ${backendLabel} persistence for this service instance.`;
+
   return `<!DOCTYPE html>
 <html lang="en">
   <head>
@@ -144,7 +161,46 @@ export function renderApiPlayground(): string {
 
       .request-section {
         display: grid;
-        gap: 4px;
+        gap: 2px;
+      }
+
+      .workspace-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .backend-chip {
+        display: grid;
+        gap: 2px;
+        min-width: 0;
+        padding: 7px 10px;
+        border: 1px solid rgba(125, 211, 252, 0.24);
+        border-radius: 12px;
+        background: rgba(8, 47, 73, 0.45);
+      }
+
+      .backend-label {
+        font-size: 0.68rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #94a3b8;
+      }
+
+      .backend-value {
+        color: #e0f2fe;
+        font-size: 0.84rem;
+      }
+
+      .backend-detail {
+        color: #94a3b8;
+        font-size: 0.75rem;
+      }
+
+      .backend-detail code {
+        color: #e2e8f0;
       }
 
       button,
@@ -408,7 +464,14 @@ export function renderApiPlayground(): string {
 
         <section class="panel panel-body workspace">
           <div class="request-section">
-            <h2>Request</h2>
+            <div class="workspace-heading">
+              <h2>Request</h2>
+              <div class="backend-chip" aria-live="polite">
+                <span class="backend-label">Active Backend</span>
+                <strong class="backend-value">${backendLabel}</strong>
+                <span class="backend-detail">${backendDescription}</span>
+              </div>
+            </div>
             <div class="request-grid">
               <label>
                 Method

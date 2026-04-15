@@ -38,6 +38,57 @@ export function renderApiPlayground(): string {
         margin-bottom: 16px;
       }
 
+      .hero-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 2px;
+      }
+
+      .brand-lockup {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+      }
+
+      .brand-mark {
+        display: grid;
+        grid-template-columns: repeat(2, 10px);
+        gap: 4px;
+        padding: 8px;
+        border-radius: 14px;
+        background: linear-gradient(180deg, rgba(14, 165, 233, 0.18), rgba(37, 99, 235, 0.08));
+        border: 1px solid rgba(125, 211, 252, 0.2);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+      }
+
+      .brand-mark span {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        background: linear-gradient(135deg, #7dd3fc, #2563eb);
+        opacity: 0.95;
+      }
+
+      .brand-mark span:nth-child(2) {
+        opacity: 0.7;
+      }
+
+      .brand-mark span:nth-child(3) {
+        opacity: 0.8;
+      }
+
+      .brand-name {
+        margin: 0 0 2px;
+        color: #f8fafc;
+        font-size: 0.9rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
       h1 {
         margin: 0;
         font-size: clamp(2rem, 5vw, 3.25rem);
@@ -93,7 +144,7 @@ export function renderApiPlayground(): string {
 
       .request-section {
         display: grid;
-        gap: 8px;
+        gap: 4px;
       }
 
       button,
@@ -286,6 +337,11 @@ export function renderApiPlayground(): string {
           grid-template-columns: 1fr;
         }
 
+        .hero-top {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
         .send {
           width: 100%;
         }
@@ -302,7 +358,21 @@ export function renderApiPlayground(): string {
   <body>
     <main>
       <section class="hero">
-        <p class="pill">Local tooling for manual API calls</p>
+        <div class="hero-top">
+          <div class="brand-lockup" aria-label="Equipments brand">
+            <div class="brand-mark" aria-hidden="true">
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <div>
+              <p class="brand-name">Equipments</p>
+              <p class="subtitle">Container operations toolkit</p>
+            </div>
+          </div>
+          <p class="pill">Local tooling for manual API calls</p>
+        </div>
         <h1>Equipments API Playground</h1>
         <p class="subtitle">
           Load a common workflow, tweak the path or JSON body, and send requests directly to the running service.

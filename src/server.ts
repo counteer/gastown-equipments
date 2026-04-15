@@ -127,5 +127,14 @@ export function buildServer(
     return store.resetAllData();
   });
 
+  app.post("/dev/clear-all-data", async (_request, reply) => {
+    if (!devMode) {
+      reply.status(404).send({ error: "not found" });
+      return;
+    }
+
+    return store.clearAllData();
+  });
+
   return app;
 }

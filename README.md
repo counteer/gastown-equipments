@@ -168,13 +168,14 @@ Service starts on `http://0.0.0.0:3000` by default.
 
 Open `http://localhost:3000/playground` for a lightweight browser playground with
 preset requests, editable JSON bodies, inline response output for manual API testing,
-and a dev-only reset button that restores the seeded baseline state.
+and dev-only data controls for either restoring the seeded baseline or clearing the service to empty.
 
-The reset action is only exposed when `NODE_ENV` is not `production`:
+The dev-only data actions are only exposed when `NODE_ENV` is not `production`:
 
 - `POST /dev/reset-all-data` resets in-memory or persisted runtime data back to the seeded baseline
-- the playground shows a `Reset All Data` button only in development mode
-- production mode returns `404` for the reset endpoint and hides the control from the playground
+- `POST /dev/clear-all-data` removes runtime data without reseeding so the service stays empty until restart or manual re-creation
+- the playground shows `Reset All Data` and `Clear All Data` buttons only in development mode
+- production mode returns `404` for both endpoints and hides the controls from the playground
 
 ### Build and Test
 
@@ -205,6 +206,7 @@ npm test
 ### Dev-Only Utilities
 
 - `POST /dev/reset-all-data` - clears service state and restores the seeded baseline for local testing
+- `POST /dev/clear-all-data` - clears service state and leaves the service empty for local testing
 
 ### Runtime Storage Backends
 

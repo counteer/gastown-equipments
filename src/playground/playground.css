@@ -311,6 +311,11 @@ textarea {
   background: rgba(69, 10, 10, 0.38);
 }
 
+.dev-tools-actions {
+  display: grid;
+  gap: 8px;
+}
+
 .dev-tools.is-disabled {
   border-color: rgba(148, 163, 184, 0.18);
   background: rgba(15, 23, 42, 0.5);

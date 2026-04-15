@@ -22,8 +22,8 @@ export function renderApiPlayground(config: RuntimeConfig, devMode: boolean): st
     ? `Using ${backendLabel} persistence at <code>${backendPath}</code>.`
     : `Using ${backendLabel} persistence for this service instance.`;
   const resetSection = devMode
-    ? '<div class="dev-tools"><button id="resetAllData" class="danger" type="button">Reset All Data</button><p class="dev-tools-copy">Dev-only action. Clears runtime state and restores the seeded baseline.</p></div>'
-    : '<div class="dev-tools is-disabled"><p class="dev-tools-copy">Reset controls are unavailable outside development mode.</p></div>';
+    ? '<div class="dev-tools"><div class="dev-tools-actions"><button id="resetAllData" class="danger" type="button">Reset All Data</button><button id="clearAllData" class="danger" type="button">Clear All Data</button></div><p class="dev-tools-copy">Dev-only actions. Reset restores the seeded baseline. Clear removes all runtime data and leaves the service empty until you recreate data or restart.</p></div>'
+    : '<div class="dev-tools is-disabled"><p class="dev-tools-copy">Dev-only data controls are unavailable outside development mode.</p></div>';
 
   return playgroundHtmlTemplate
     .replaceAll("__BACKEND_LABEL__", backendLabel)

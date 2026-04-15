@@ -44,6 +44,7 @@ const responseDetail = document.getElementById("responseDetail");
 const responseTime = document.getElementById("responseTime");
 const sendButton = document.getElementById("send");
 const resetAllDataButton = document.getElementById("resetAllData");
+const clearAllDataButton = document.getElementById("clearAllData");
 
 function setResponseStatus(code, text, detail, tone) {
   responseCode.textContent = code;
@@ -123,37 +124,57 @@ async function sendRequest() {
   }
 }
 
-async function resetAllData() {
-  if (!resetAllDataButton) {
+async function runDevDataAction(button, url, pendingDetail, successDetail, failureDetail) {
+  if (!button) {
     return;
   }
 
-  resetAllDataButton.disabled = true;
-  setResponseStatus("Resetting", "Dev reset requested", "Clearing runtime data and restoring the seeded baseline.", "status-idle");
+  button.disabled = true;
+  setResponseStatus("Working", "Dev data action requested", pendingDetail, "status-idle");
   responseTime.textContent = "Duration: -";
 
   const startedAt = performance.now();
 
   try {
-    const response = await fetch("/dev/reset-all-data", { method: "POST" });
+    const response = await fetch(url, { method: "POST" });
     const duration = Math.round(performance.now() - startedAt);
     const payload = JSON.stringify(await response.json(), null, 2);
 
     setResponseStatus(
       String(response.status),
-      response.ok ? "Reset complete" : (response.statusText || "Reset failed"),
-      response.ok ? "The service state was reset for local testing." : "Reset endpoint was unavailable or returned an error.",
+      response.ok ? "Action complete" : (response.statusText || "Action failed"),
+      response.ok ? successDetail : failureDetail,
       response.ok ? "status-ok" : "status-error"
     );
     responseTime.textContent = `Duration: ${duration} ms`;
     responseBodyInput.value = payload;
   } catch (error) {
-    setResponseStatus("Request failed", "Network error", "The browser could not reach the reset endpoint.", "status-error");
+    setResponseStatus("Request failed", "Network error", failureDetail, "status-error");
     responseTime.textContent = "Duration: -";
     responseBodyInput.value = String(error);
   } finally {
-    resetAllDataButton.disabled = false;
+    button.disabled = false;
   }
+}
+
+async function resetAllData() {
+  return runDevDataAction(
+    resetAllDataButton,
+    "/dev/reset-all-data",
+    "Clearing runtime data and restoring the seeded baseline.",
+    "The service state was reset to the seeded baseline for local testing.",
+    "The seeded reset endpoint was unavailable or returned an error."
+  );
+}
+
+async function clearAllData() {
+  return runDevDataAction(
+    clearAllDataButton,
+    "/dev/clear-all-data",
+    "Clearing all runtime data and leaving the service empty.",
+    "The service state was cleared and now remains empty until you recreate data or restart.",
+    "The clear-all endpoint was unavailable or returned an error."
+  );
 }
 
 document.querySelectorAll(".preset").forEach((button) => {
@@ -162,4 +183,5 @@ document.querySelectorAll(".preset").forEach((button) => {
 
 sendButton.addEventListener("click", sendRequest);
 resetAllDataButton?.addEventListener("click", resetAllData);
+clearAllDataButton?.addEventListener("click", clearAllData);
 loadPreset("availability");

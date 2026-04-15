@@ -38,7 +38,8 @@ test("GET /playground serves the HTML playground", async () => {
   assert.match(response.body, /\/playground\/playground\.css/);
   assert.match(response.body, /\/playground\/playground\.js/);
   assert.match(response.body, /Reset All Data/);
-  assert.match(response.body, /Dev-only action/);
+  assert.match(response.body, /Clear All Data/);
+  assert.match(response.body, /Dev-only actions/);
 });
 
 test("GET /playground shows configured backend path when present", async () => {
@@ -59,6 +60,7 @@ test("GET /playground hides reset controls outside development mode", async () =
 
   assert.equal(response.statusCode, 200);
   assert.doesNotMatch(response.body, /Reset All Data/);
+  assert.doesNotMatch(response.body, /Clear All Data/);
   assert.match(response.body, /unavailable outside development mode/);
 });
 
@@ -79,7 +81,9 @@ test("GET /playground/playground.js serves the client script", async () => {
   assert.match(response.headers["content-type"] ?? "", /^text\/javascript/);
   assert.match(response.body, /const presets =/);
   assert.match(response.body, /function resetResponseOutput\(/);
+  assert.match(response.body, /function runDevDataAction\(/);
   assert.match(response.body, /function resetAllData\(/);
+  assert.match(response.body, /function clearAllData\(/);
   assert.match(response.body, /resetResponseOutput\(\);/);
   assert.match(response.body, /loadPreset\("availability"\)/);
 });
@@ -126,9 +130,34 @@ test("POST /dev/reset-all-data resets state in development mode", async () => {
   assert.equal(containersBody.containers.some((container) => container.containerNumber === "CONU9999999"), false);
 });
 
+test("POST /dev/clear-all-data clears state to empty in development mode", async () => {
+  const app = createApp();
+
+  const clear = await app.inject({ method: "POST", url: "/dev/clear-all-data" });
+  assert.equal(clear.statusCode, 200);
+  assert.deepEqual(clear.json(), { reset: true, seeded: false });
+
+  const types = await app.inject({ method: "GET", url: "/equipment-types" });
+  assert.deepEqual(types.json(), { equipmentTypes: [] });
+
+  const availability = await app.inject({ method: "GET", url: "/availability?depotCode=CNSHA-01" });
+  assert.deepEqual(availability.json(), { availability: [] });
+
+  const containers = await app.inject({ method: "GET", url: "/containers" });
+  assert.deepEqual(containers.json(), { containers: [] });
+});
+
 test("POST /dev/reset-all-data is unavailable outside development mode", async () => {
   const app = buildServer(new EquipmentsStore(true), undefined, false);
   const response = await app.inject({ method: "POST", url: "/dev/reset-all-data" });
+
+  assert.equal(response.statusCode, 404);
+  assert.deepEqual(response.json(), { error: "not found" });
+});
+
+test("POST /dev/clear-all-data is unavailable outside development mode", async () => {
+  const app = buildServer(new EquipmentsStore(true), undefined, false);
+  const response = await app.inject({ method: "POST", url: "/dev/clear-all-data" });
 
   assert.equal(response.statusCode, 404);
   assert.deepEqual(response.json(), { error: "not found" });

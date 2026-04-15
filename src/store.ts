@@ -38,8 +38,13 @@ export class EquipmentsStore {
   }
 
   resetAllData(): { reset: true; seeded: boolean } {
-    this.initializeState();
+    this.initializeState(this.seedDefaults);
     return { reset: true, seeded: this.seedDefaults };
+  }
+
+  clearAllData(): { reset: true; seeded: false } {
+    this.initializeState(false);
+    return { reset: true, seeded: false };
   }
 
   listEquipmentTypes(): EquipmentType[] {
@@ -354,13 +359,13 @@ export class EquipmentsStore {
     this.reservationByBooking = new Map(snapshot.reservations.map((reservation) => [reservation.bookingReference, reservation.id]));
   }
 
-  private initializeState(): void {
+  private initializeState(seed = this.seedDefaults): void {
     this.equipmentTypes = new Map();
     this.containers = new Map();
     this.reservations = new Map();
     this.reservationByBooking = new Map();
 
-    if (this.seedDefaults) {
+    if (seed) {
       this.seedData();
     }
 

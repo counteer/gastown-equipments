@@ -67,6 +67,8 @@ test("GET /playground/playground.js serves the client script", async () => {
   assert.equal(response.statusCode, 200);
   assert.match(response.headers["content-type"] ?? "", /^text\/javascript/);
   assert.match(response.body, /const presets =/);
+  assert.match(response.body, /function resetResponseOutput\(/);
+  assert.match(response.body, /resetResponseOutput\(\);/);
   assert.match(response.body, /loadPreset\("availability"\)/);
 });
 

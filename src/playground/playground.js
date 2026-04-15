@@ -51,6 +51,12 @@ function setResponseStatus(code, text, detail, tone) {
   responseStatus.className = `status-chip ${tone}`;
 }
 
+function resetResponseOutput() {
+  setResponseStatus("Waiting", "Ready to send", "The next response will appear in the panel on the right.", "status-idle");
+  responseTime.textContent = "Duration: -";
+  responseBodyInput.value = "";
+}
+
 function loadPreset(name) {
   const preset = presets[name];
   if (!preset) {
@@ -60,6 +66,7 @@ function loadPreset(name) {
   methodInput.value = preset.method;
   pathInput.value = preset.path;
   requestBodyInput.value = preset.body;
+  resetResponseOutput();
 
   document.querySelectorAll(".preset").forEach((button) => {
     button.classList.toggle("active", button.dataset.preset === name);

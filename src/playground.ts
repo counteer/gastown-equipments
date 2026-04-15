@@ -27,15 +27,15 @@ export function renderApiPlayground(): string {
       }
 
       main {
-        width: min(1200px, calc(100vw - 32px));
+        width: min(1160px, calc(100vw - 28px));
         margin: 0 auto;
-        padding: 24px 0 40px;
+        padding: 18px 0 28px;
       }
 
       .hero {
         display: grid;
-        gap: 8px;
-        margin-bottom: 20px;
+        gap: 6px;
+        margin-bottom: 16px;
       }
 
       h1 {
@@ -52,30 +52,30 @@ export function renderApiPlayground(): string {
 
       .layout {
         display: grid;
-        grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
-        gap: 20px;
+        grid-template-columns: minmax(250px, 300px) minmax(0, 1fr);
+        gap: 16px;
       }
 
       .panel {
         background: rgba(15, 23, 42, 0.82);
         border: 1px solid rgba(148, 163, 184, 0.18);
-        border-radius: 20px;
-        box-shadow: 0 24px 70px rgba(2, 6, 23, 0.35);
+        border-radius: 18px;
+        box-shadow: 0 18px 54px rgba(2, 6, 23, 0.34);
         backdrop-filter: blur(16px);
       }
 
       .panel-body {
-        padding: 18px;
+        padding: 15px;
       }
 
       .catalog {
         display: grid;
-        gap: 12px;
+        gap: 10px;
       }
 
       .catalog-group {
         display: grid;
-        gap: 8px;
+        gap: 6px;
       }
 
       .catalog-group h2,
@@ -96,9 +96,9 @@ export function renderApiPlayground(): string {
 
       .preset {
         width: 100%;
-        padding: 12px 14px;
+        padding: 10px 12px;
         border: 1px solid rgba(148, 163, 184, 0.14);
-        border-radius: 14px;
+        border-radius: 12px;
         background: rgba(30, 41, 59, 0.65);
         color: inherit;
         text-align: left;
@@ -123,51 +123,51 @@ export function renderApiPlayground(): string {
 
       .workspace {
         display: grid;
-        gap: 16px;
+        gap: 12px;
       }
 
       .request-grid {
         display: grid;
-        grid-template-columns: 140px minmax(0, 1fr) 120px;
-        gap: 12px;
+        grid-template-columns: 116px minmax(0, 1fr) 112px;
+        gap: 10px;
       }
 
       label {
         display: grid;
-        gap: 6px;
+        gap: 4px;
         color: #cbd5e1;
-        font-size: 0.92rem;
+        font-size: 0.88rem;
       }
 
       select,
       input,
       textarea {
         width: 100%;
-        padding: 12px 14px;
-        border-radius: 14px;
+        padding: 10px 12px;
+        border-radius: 12px;
         border: 1px solid rgba(148, 163, 184, 0.16);
         background: rgba(15, 23, 42, 0.8);
         color: inherit;
       }
 
       textarea {
-        min-height: 250px;
+        min-height: 220px;
         resize: vertical;
         font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-        line-height: 1.5;
+        line-height: 1.4;
       }
 
       .editor-grid {
         display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 16px;
+        grid-template-columns: minmax(0, 0.94fr) minmax(0, 1.06fr);
+        gap: 12px;
       }
 
       .send {
         align-self: end;
-        padding: 12px 16px;
+        padding: 10px 14px;
         border: 0;
-        border-radius: 14px;
+        border-radius: 12px;
         background: linear-gradient(135deg, #38bdf8, #2563eb);
         color: white;
         cursor: pointer;
@@ -179,39 +179,113 @@ export function renderApiPlayground(): string {
       }
 
       .meta {
-        display: flex;
-        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: minmax(0, 1.2fr) auto;
         gap: 10px;
-        color: #94a3b8;
-        font-size: 0.92rem;
+        align-items: stretch;
       }
 
       .pill {
         display: inline-flex;
         align-items: center;
         gap: 8px;
-        padding: 8px 12px;
-        border-radius: 999px;
+        padding: 8px 11px;
+        border-radius: 12px;
         background: rgba(30, 41, 59, 0.65);
+        color: #94a3b8;
+        font-size: 0.86rem;
+      }
+
+      .meta-side {
+        display: grid;
+        gap: 10px;
+        justify-items: end;
+      }
+
+      .status-chip {
+        display: grid;
+        gap: 4px;
+        min-width: 0;
+        padding: 10px 12px;
+        border: 1px solid rgba(148, 163, 184, 0.16);
+        border-radius: 14px;
+        background: rgba(15, 23, 42, 0.92);
+      }
+
+      .status-label {
+        font-size: 0.74rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #94a3b8;
+      }
+
+      .status-main {
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .status-code {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #f8fafc;
+      }
+
+      .status-text {
+        font-size: 0.86rem;
+        color: #cbd5e1;
+      }
+
+      .status-detail {
+        font-size: 0.8rem;
+        color: #64748b;
+      }
+
+      .status-idle {
+        border-color: rgba(148, 163, 184, 0.16);
       }
 
       .status-ok {
+        border-color: rgba(34, 197, 94, 0.35);
+        background: linear-gradient(180deg, rgba(21, 128, 61, 0.16), rgba(15, 23, 42, 0.92));
+      }
+
+      .status-ok .status-code {
         color: #86efac;
       }
 
       .status-error {
+        border-color: rgba(244, 63, 94, 0.35);
+        background: linear-gradient(180deg, rgba(190, 24, 93, 0.16), rgba(15, 23, 42, 0.92));
+      }
+
+      .status-error .status-code {
         color: #fda4af;
+      }
+
+      .tip {
+        justify-self: end;
+        max-width: 32ch;
       }
 
       @media (max-width: 900px) {
         .layout,
         .editor-grid,
-        .request-grid {
+        .request-grid,
+        .meta {
           grid-template-columns: 1fr;
         }
 
         .send {
           width: 100%;
+        }
+
+        .meta-side,
+        .tip {
+          justify-items: stretch;
+          justify-self: stretch;
+          max-width: none;
         }
       }
     </style>
@@ -287,9 +361,18 @@ export function renderApiPlayground(): string {
           </div>
 
           <div class="meta">
-            <div id="responseStatus" class="pill">Status: waiting</div>
-            <div id="responseTime" class="pill">Duration: -</div>
-            <div class="pill">Tip: placeholders like <code>{id}</code> can be edited directly in the path field.</div>
+            <div id="responseStatus" class="status-chip status-idle" aria-live="polite">
+              <span class="status-label">Response Status</span>
+              <div class="status-main">
+                <strong id="responseCode" class="status-code">Waiting</strong>
+                <span id="responseText" class="status-text">Ready to send</span>
+              </div>
+              <span id="responseDetail" class="status-detail">The next response will appear in the panel on the right.</span>
+            </div>
+            <div class="meta-side">
+              <div id="responseTime" class="pill">Duration: -</div>
+              <div class="pill tip">Tip: placeholders like <code>{id}</code> can be edited directly in the path field.</div>
+            </div>
           </div>
         </section>
       </section>
@@ -336,7 +419,17 @@ export function renderApiPlayground(): string {
       const requestBodyInput = document.getElementById('requestBody');
       const responseBodyInput = document.getElementById('responseBody');
       const responseStatus = document.getElementById('responseStatus');
+      const responseCode = document.getElementById('responseCode');
+      const responseText = document.getElementById('responseText');
+      const responseDetail = document.getElementById('responseDetail');
       const responseTime = document.getElementById('responseTime');
+
+      function setResponseStatus(code, text, detail, tone) {
+        responseCode.textContent = code;
+        responseText.textContent = text;
+        responseDetail.textContent = detail;
+        responseStatus.className = 'status-chip ' + tone;
+      }
 
       function loadPreset(name) {
         const preset = presets[name];
@@ -359,8 +452,7 @@ export function renderApiPlayground(): string {
         const rawBody = requestBodyInput.value.trim();
 
         if (!path) {
-          responseStatus.textContent = 'Status: missing path';
-          responseStatus.className = 'pill status-error';
+          setResponseStatus('Missing path', 'Request blocked', 'Add a path before sending the request.', 'status-error');
           return;
         }
 
@@ -372,8 +464,7 @@ export function renderApiPlayground(): string {
             options.body = JSON.stringify(JSON.parse(rawBody));
             headers['content-type'] = 'application/json';
           } catch (error) {
-            responseStatus.textContent = 'Status: invalid JSON body';
-            responseStatus.className = 'pill status-error';
+            setResponseStatus('Invalid JSON', 'Request blocked', 'Fix the request body and try again.', 'status-error');
             responseBodyInput.value = String(error);
             return;
           }
@@ -389,13 +480,11 @@ export function renderApiPlayground(): string {
             ? JSON.stringify(await response.json(), null, 2)
             : await response.text();
 
-          responseStatus.textContent = 'Status: ' + response.status + ' ' + response.statusText;
-          responseStatus.className = 'pill ' + (response.ok ? 'status-ok' : 'status-error');
+          setResponseStatus(String(response.status), response.statusText || 'Response received', response.ok ? 'Request completed successfully.' : 'Inspect the payload for error details.', response.ok ? 'status-ok' : 'status-error');
           responseTime.textContent = 'Duration: ' + duration + ' ms';
           responseBodyInput.value = payload;
         } catch (error) {
-          responseStatus.textContent = 'Status: request failed';
-          responseStatus.className = 'pill status-error';
+          setResponseStatus('Request failed', 'Network error', 'The browser could not reach the running service.', 'status-error');
           responseTime.textContent = 'Duration: -';
           responseBodyInput.value = String(error);
         }

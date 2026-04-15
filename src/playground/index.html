@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Equipments API Playground</title>
+    <link rel="stylesheet" href="/playground/playground.css" />
+    <script type="module" src="/playground/playground.js"></script>
+  </head>
+  <body>
+    <main>
+      <section class="hero">
+        <div class="hero-top">
+          <div class="brand-lockup" aria-label="Equipments brand">
+            <div class="brand-mark" aria-hidden="true">
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <div>
+              <p class="brand-name">Equipments</p>
+              <p class="subtitle">Container operations toolkit</p>
+            </div>
+          </div>
+          <p class="pill">Local tooling for manual API calls</p>
+        </div>
+        <div class="hero-heading">
+          <div class="hero-copy">
+            <h1>Equipments API Playground</h1>
+            <p class="subtitle">
+              Load a common workflow, tweak the path or JSON body, and send requests directly to the running service.
+            </p>
+          </div>
+          <div class="backend-chip" aria-live="polite">
+            <span class="backend-label">Active Backend</span>
+            <strong class="backend-value">__BACKEND_LABEL__</strong>
+            <span class="backend-detail">__BACKEND_DESCRIPTION__</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="layout">
+        <aside class="panel panel-body catalog" aria-label="Request presets">
+          <div class="catalog-group">
+            <h2>Catalog</h2>
+            <button class="preset" data-preset="health"><strong>Health Check</strong><span>GET /health</span></button>
+            <button class="preset" data-preset="listTypes"><strong>List Equipment Types</strong><span>GET /equipment-types</span></button>
+            <button class="preset" data-preset="createType"><strong>Create Equipment Type</strong><span>POST /equipment-types</span></button>
+          </div>
+
+          <div class="catalog-group">
+            <h2>Containers</h2>
+            <button class="preset" data-preset="registerContainer"><strong>Register Container</strong><span>POST /containers</span></button>
+            <button class="preset" data-preset="listContainers"><strong>List Containers</strong><span>GET /containers</span></button>
+            <button class="preset" data-preset="overrideStatus"><strong>Override Status</strong><span>PATCH /containers/{id}/status</span></button>
+            <button class="preset" data-preset="pickup"><strong>Pickup Container</strong><span>POST /containers/{id}/pickup</span></button>
+            <button class="preset" data-preset="return"><strong>Return Container</strong><span>POST /containers/{id}/return</span></button>
+          </div>
+
+          <div class="catalog-group">
+            <h2>Reservations</h2>
+            <button class="preset active" data-preset="availability"><strong>Availability</strong><span>GET /availability</span></button>
+            <button class="preset" data-preset="reserve"><strong>Create Reservation</strong><span>POST /reservations</span></button>
+            <button class="preset" data-preset="release"><strong>Release Reservation</strong><span>DELETE /reservations/{bookingReference}</span></button>
+            <button class="preset" data-preset="event"><strong>Send Event</strong><span>POST /events</span></button>
+          </div>
+        </aside>
+
+        <section class="panel panel-body workspace">
+          <div class="request-section">
+            <h2>Request</h2>
+            <div class="request-grid">
+              <label>
+                Method
+                <select id="method">
+                  <option>GET</option>
+                  <option>POST</option>
+                  <option>PUT</option>
+                  <option>PATCH</option>
+                  <option>DELETE</option>
+                </select>
+              </label>
+              <label>
+                Path
+                <input id="path" type="text" spellcheck="false" />
+              </label>
+              <button id="send" class="send" type="button">Send Request</button>
+            </div>
+          </div>
+
+          <div class="editor-grid">
+            <label>
+              JSON request body
+              <textarea id="requestBody" spellcheck="false"></textarea>
+            </label>
+            <label>
+              Response
+              <textarea id="responseBody" spellcheck="false" readonly></textarea>
+            </label>
+          </div>
+
+          <div class="meta">
+            <div id="responseStatus" class="status-chip status-idle" aria-live="polite">
+              <span class="status-label">Response Status</span>
+              <div class="status-main">
+                <strong id="responseCode" class="status-code">Waiting</strong>
+                <span id="responseText" class="status-text">Ready to send</span>
+              </div>
+              <span id="responseDetail" class="status-detail">The next response will appear in the panel on the right.</span>
+            </div>
+            <div class="meta-side">
+              <div id="responseTime" class="pill">Duration: -</div>
+              <div class="pill tip">Tip: placeholders like <code>{id}</code> can be edited directly in the path field.</div>
+            </div>
+          </div>
+        </section>
+      </section>
+    </main>
+  </body>
+</html>

@@ -2,7 +2,7 @@ import Fastify, { type FastifyInstance } from "fastify";
 
 import { DomainError } from "./errors.js";
 import { type RuntimeConfig, StorageBackend } from "./persistence.js";
-import { renderApiPlayground } from "./playground.js";
+import { getPlaygroundScript, getPlaygroundStyle, renderApiPlayground } from "./playground.js";
 import { EquipmentsStore } from "./store.js";
 
 const defaultRuntimeConfig: RuntimeConfig = { backend: StorageBackend.MEMORY, path: "" };
@@ -25,6 +25,14 @@ export function buildServer(store = new EquipmentsStore(), runtimeConfig: Runtim
 
   app.get("/playground", async (_request, reply) => {
     reply.type("text/html; charset=utf-8").send(renderApiPlayground(runtimeConfig));
+  });
+
+  app.get("/playground/playground.css", async (_request, reply) => {
+    reply.type("text/css; charset=utf-8").send(getPlaygroundStyle());
+  });
+
+  app.get("/playground/playground.js", async (_request, reply) => {
+    reply.type("text/javascript; charset=utf-8").send(getPlaygroundScript());
   });
 
   app.get("/health", async () => ({ status: "ok" }));

@@ -35,6 +35,8 @@ test("GET /playground serves the HTML playground", async () => {
   assert.match(response.body, /Create Reservation/);
   assert.match(response.body, /Active Backend/);
   assert.match(response.body, /memory/);
+  assert.match(response.body, /\/playground\/playground\.css/);
+  assert.match(response.body, /\/playground\/playground\.js/);
 });
 
 test("GET /playground shows configured backend path when present", async () => {
@@ -47,6 +49,25 @@ test("GET /playground shows configured backend path when present", async () => {
   assert.equal(response.statusCode, 200);
   assert.match(response.body, /sqlite/);
   assert.match(response.body, /\/tmp\/equipments\.sqlite/);
+});
+
+test("GET /playground/playground.css serves the stylesheet", async () => {
+  const app = createApp();
+  const response = await app.inject({ method: "GET", url: "/playground/playground.css" });
+
+  assert.equal(response.statusCode, 200);
+  assert.match(response.headers["content-type"] ?? "", /^text\/css/);
+  assert.match(response.body, /\.backend-chip/);
+});
+
+test("GET /playground/playground.js serves the client script", async () => {
+  const app = createApp();
+  const response = await app.inject({ method: "GET", url: "/playground/playground.js" });
+
+  assert.equal(response.statusCode, 200);
+  assert.match(response.headers["content-type"] ?? "", /^text\/javascript/);
+  assert.match(response.body, /const presets =/);
+  assert.match(response.body, /loadPreset\("availability"\)/);
 });
 
 test("equipment type endpoints support list/create/update", async () => {

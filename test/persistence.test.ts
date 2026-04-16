@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { DatabaseSync } from "node:sqlite";
 import test from "node:test";
 
 import {
@@ -78,6 +79,66 @@ test("sqlite backend persists store state across restarts", () => {
     const storeB = createStoreFromRuntimeConfig({ backend: StorageBackend.SQLITE, path }, false);
     assert.equal(created.containerNumber, "CONU9999999");
     assert.ok(storeB.listContainers({ depot: "NLRTM-01" }).some((item) => item.containerNumber === "CONU9999999"));
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("sqlite backend stores state in relational tables", () => {
+  const dir = mkdtempSync(join(tmpdir(), "equipments-sqlite-relational-"));
+  try {
+    const path = join(dir, "equipments.sqlite");
+    const store = createStoreFromRuntimeConfig({ backend: StorageBackend.SQLITE, path }, false);
+    store.createEquipmentType({
+      code: "45HC",
+      description: "45-foot High Cube",
+      nominalLength: "45'",
+      maxPayloadKg: 29500
+    });
+
+    const first = store.registerContainer({
+      containerNumber: "MSCU1234567",
+      equipmentType: "45HC",
+      currentDepot: "NLRTM-01"
+    });
+    const second = store.registerContainer({
+      containerNumber: "MSCU1234568",
+      equipmentType: "45HC",
+      currentDepot: "NLRTM-01"
+    });
+
+    const { reservation } = store.createReservation({
+      bookingReference: "BOOK-45HC",
+      originDepot: "NLRTM-01",
+      equipment: [{ type: "45HC", quantity: 2 }]
+    });
+
+    const db = new DatabaseSync(path);
+    const meta = db.prepare("SELECT initialized FROM store_meta WHERE id = 1").get() as { initialized: number };
+    const equipmentTypeRow = db.prepare("SELECT code, description FROM equipment_types WHERE code = ?").get("45HC") as {
+      code: string;
+      description: string;
+    };
+    const containerCount = db.prepare("SELECT COUNT(*) AS count FROM containers").get() as { count: number };
+    const reservationRow = db
+      .prepare("SELECT booking_reference AS bookingReference, origin_depot AS originDepot FROM reservations WHERE id = ?")
+      .get(reservation.id) as { bookingReference: string; originDepot: string };
+    const links = db
+      .prepare(
+        "SELECT container_id AS containerId FROM reservation_containers WHERE reservation_id = ? ORDER BY order_index"
+      )
+      .all(reservation.id) as Array<{ containerId: string }>;
+
+    assert.equal(meta.initialized, 1);
+    assert.equal(equipmentTypeRow.code, "45HC");
+    assert.equal(equipmentTypeRow.description, "45-foot High Cube");
+    assert.equal(containerCount.count, 2);
+    assert.equal(reservationRow.bookingReference, "BOOK-45HC");
+    assert.equal(reservationRow.originDepot, "NLRTM-01");
+    assert.deepEqual(
+      links.map((item) => item.containerId),
+      [first.id, second.id]
+    );
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }

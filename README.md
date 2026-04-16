@@ -215,7 +215,7 @@ The same API and domain rules run on top of one of these backends:
 
 - `memory` (default) keeps state in-process only
 - `db` persists a JSON snapshot to disk
-- `sqlite` persists the same snapshot in a SQLite database
+- `sqlite` persists store state in relational SQLite tables on disk
 - SQLite aliases: `sqlite3`, `sql`, `persistent-sqlite`, `persistent-sqlite3`
 
 Environment variables:
